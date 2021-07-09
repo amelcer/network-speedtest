@@ -10,7 +10,9 @@ RUN chmod 0644 /etc/cron.d/crontab
 
 RUN /usr/bin/crontab /etc/cron.d/crontab
 
-COPY main.py main.py
+COPY . .
+
+RUN pip install -r requirments.txt
 
 RUN echo $PYTHONPATH
 
