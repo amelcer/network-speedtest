@@ -4,3 +4,24 @@ services:
         build: speedtest
         volumes:
             - ./speedtest:/app
+    mongodb:
+        image: mongo:4.4
+        restart: always
+        container_name: mongodb
+        volumes:
+            - ./db:/data/db
+        networks:
+            - backend
+    api:
+        build: api
+        volumes:
+            - ./api:/app
+        container_name: api
+        networks:
+            - backend
+        env_file:
+            - ./.env
+        ports:
+            - ${API_PORT}:${API_PORT}
+networks:
+    backend:
