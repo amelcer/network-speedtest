@@ -4,6 +4,7 @@ services:
         build: speedtest
         volumes:
             - ./speedtest:/app
+        container_name: speedtester
     mongodb:
         image: mongo:4.4
         restart: always

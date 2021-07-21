@@ -1,3 +1,5 @@
-import datetime
-print(datetime.datetime.now())
+from speedtester import SpeedTester
 
+
+tester = SpeedTester()
+tester.test()

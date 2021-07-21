@@ -12,9 +12,7 @@ RUN /usr/bin/crontab /etc/cron.d/crontab
 
 COPY . .
 
-RUN pip install -r requirments.txt
-
-RUN echo $PYTHONPATH
+RUN pip3 install -r requirments.txt
 
 # run crond as main process of container
 CMD ["cron", "-f"]

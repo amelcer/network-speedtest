@@ -1,25 +1,32 @@
 import speedtest
+from datetime import datetime, timezone
 from speedtest import ConfigRetrievalError 
 
 
-def bitsToMbs(bits):
-    return round(bits / 8 / 1000 / 100, 2)
+class SpeedTester:
 
-try:    
-    sp = speedtest.Speedtest()
+    def __init__(self) -> None:
+        pass
 
-    sp.download()
-    sp.upload()
-    results = sp.results.dict()
+    def test(self):
+        try:    
+            sp = speedtest.Speedtest()
+
+            sp.download()
+            sp.upload()
+            results = sp.results.dict()
+
+            test = {
+                "down": self.bitsToMbs(results['download']),
+                "up": self.bitsToMbs(results['upload']),
+                "server": results['server']['sponsor'],
+                "date": datetime.now(timezone.utc).isoformat()
+            }
+
+            print(test)
+        except ConfigRetrievalError:
+            print('config error')
 
 
-
-    test = {
-        "download": bitsToMbs(results['download']),
-        "upload": bitsToMbs(results['upload']),
-        "server": results['server']['sponsor']
-    }
-
-    print(test)
-except ConfigRetrievalError:
-    print('config error')
+    def bitsToMbs(self, bits):
+        return round(bits / 8 / 1000 / 100, 2)
