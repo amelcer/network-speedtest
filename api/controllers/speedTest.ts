@@ -24,10 +24,10 @@ const getTests = (req: Request, res: Response, next: NextFunction) => {
 }
 
 const addTest = (req: Request<ISpeedTest>, res: Response, next: NextFunction) => {
-    const { up, down, date } = req.body
+    const { up, down, date, server } = req.body
 
-    if (up && down && date) {
-        const test = new SpeedTest({ up, down, date })
+    if (up && down && date && server) {
+        const test = new SpeedTest({ up, down, date, server })
         test.save()
             .then(() => {
                 return res.sendStatus(201)
