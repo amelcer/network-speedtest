@@ -3,6 +3,7 @@ import speedTestController from "../controllers/speedTest"
 
 const router = express.Router()
 
-router.get("/all", speedTestController.getTests)
+router.get("/get", speedTestController.getTests)
+router.post("/add", speedTestController.addTest)
 
 export = router
