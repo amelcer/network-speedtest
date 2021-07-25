@@ -29,14 +29,20 @@ const addTest = (req: Request<ISpeedTest>, res: Response, next: NextFunction) =>
     if (up && down && date && server) {
         const test = new SpeedTest({ up, down, date, server })
         test.save()
-            .then(() => {
-                return res.sendStatus(201)
+            .then((saved) => {
+                console.log("SAVED REQUEST")
+                return res.status(201).json(saved)
             })
             .catch((error) => {
+                console.log(error)
                 return res.status(500).json({
                     message: error.message,
                 })
             })
+    } else {
+        return res.status(400).json({
+            message: `Wrong data body`,
+        })
     }
 }
 
