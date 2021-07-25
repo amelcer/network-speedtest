@@ -17,15 +17,29 @@ class SpeedTester:
             results = sp.results.dict()
 
             test = {
-                "down": self.bitsToMbs(results['download']),
-                "up": self.bitsToMbs(results['upload']),
-                "server": results['server']['sponsor'],
+                "down": self.bitsToMbs(results["download"]),
+                "up": self.bitsToMbs(results["upload"]),
+                "server": results["server"]["sponsor"],
                 "date": datetime.now(timezone.utc).isoformat()
             }
 
-            print(test)
+            return test
         except ConfigRetrievalError:
-            print('config error')
+            test = {
+                "down": 0,
+                "up": 0,
+                "server": "",
+                "date": datetime.now(timezone.utc).isoformat()
+            }
+            return test
+        except Exception:
+            test = {
+                "down": 0,
+                "up": 0,
+                "server": "",
+                "date": datetime.now(timezone.utc).isoformat()
+            }
+            return test
 
 
     def bitsToMbs(self, bits):
