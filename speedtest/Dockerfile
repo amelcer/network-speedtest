@@ -12,8 +12,6 @@ RUN /usr/bin/crontab /etc/cron.d/crontab
 
 COPY . .
 
-COPY ../.env .
-
 RUN pip3 install -r requirments.txt
 
 # run crond as main process of container
