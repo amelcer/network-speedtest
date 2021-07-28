@@ -1,4 +1,4 @@
-import { Grid, makeStyles } from "@material-ui/core"
+import { Grid, Card, IconButton, makeStyles } from "@material-ui/core"
 import Stats from "./Stats"
 import GetAppIcon from "@material-ui/icons/GetApp"
 import PublishIcon from "@material-ui/icons/Publish"
@@ -13,6 +13,9 @@ const useStyles = makeStyles((theme) => ({
     },
     chartContainer: {
         minHeight: "500px",
+        width: "100%",
+        display: "flex",
+        alignItems: "center",
     },
     arrows: {
         width: "100%",
@@ -43,23 +46,24 @@ const Dashboard = () => {
             <Grid item lg={4} sm={6}>
                 <Stats title="Największy upload dziś" icon={<PublishIcon />} value={35} />
             </Grid>
-            <Grid
-                container
-                justifyContent="center"
-                alignContent="center"
-                className={classes.chartContainer}
-                item
-                xs={12}
-            >
-                <Grid item xs={1} container alignContent="center">
-                    <ChevronLeftIcon className={classes.arrows} />
-                </Grid>
-                <Grid item xs={10}>
-                    <LineChart data={foo} />
-                </Grid>
-                <Grid item xs={1} container alignContent="center">
-                    <ChevronRightIcon className={classes.arrows} />
-                </Grid>
+            <Grid container justifyContent="center" alignContent="center" item xs={12}>
+                <Card className={classes.chartContainer}>
+                    <Grid container item xs={12}>
+                        <Grid item xs={1} container alignContent="center">
+                            <IconButton className={classes.arrows}>
+                                <ChevronLeftIcon />
+                            </IconButton>
+                        </Grid>
+                        <Grid item xs={10}>
+                            <LineChart data={foo} />
+                        </Grid>
+                        <Grid item xs={1} container alignContent="center">
+                            <IconButton className={classes.arrows}>
+                                <ChevronRightIcon />
+                            </IconButton>
+                        </Grid>
+                    </Grid>
+                </Card>
             </Grid>
         </Grid>
     )
