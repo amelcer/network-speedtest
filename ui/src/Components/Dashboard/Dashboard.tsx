@@ -1,3 +1,4 @@
+import { useEffect } from "react"
 import { Grid, Card, IconButton, makeStyles } from "@material-ui/core"
 import Stats from "./Stats"
 import GetAppIcon from "@material-ui/icons/GetApp"
@@ -37,6 +38,19 @@ const foo = {
 
 const Dashboard = () => {
     const classes = useStyles()
+
+    useEffect(() => {
+        const getResults = async () => {
+            try {
+                const response = await fetch("http://localhost:5001/tests/get")
+                const data = await response.json()
+                console.log(data)
+            } catch (e) {
+                console.error(e)
+            }
+        }
+        getResults()
+    }, [])
 
     return (
         <Grid container justifyContent="center" className={classes.container} item sm={10} xs={12} spacing={3}>
