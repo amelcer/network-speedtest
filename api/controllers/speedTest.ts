@@ -12,7 +12,7 @@ const getTests = (req: Request, res: Response, next: NextFunction) => {
 
     SpeedTest.find(filters)
         .limit(100)
-        .sort("date")
+        .sort({ date: "desc" })
         .then((results) => {
             return res.status(200).json(results)
         })
