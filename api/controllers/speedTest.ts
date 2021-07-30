@@ -12,7 +12,7 @@ const getTests = (req: Request, res: Response, next: NextFunction) => {
 
     SpeedTest.find(filters)
         .limit(100)
-        .sort("date")
+        .sort({ date: "desc" })
         .then((results) => {
             return res.status(200).json(results)
         })
@@ -25,8 +25,7 @@ const getTests = (req: Request, res: Response, next: NextFunction) => {
 
 const addTest = (req: Request<ISpeedTest>, res: Response, next: NextFunction) => {
     const { up, down, date, server } = req.body
-
-    if (up && down && date && server) {
+    if (up !== undefined && down !== undefined && date && server) {
         const test = new SpeedTest({ up, down, date, server })
         test.save()
             .then((saved) => {
