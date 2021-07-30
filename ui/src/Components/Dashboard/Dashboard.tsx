@@ -1,11 +1,19 @@
-import { useEffect } from "react"
+import { useEffect, useState } from "react"
 import { Grid, Card, IconButton, makeStyles } from "@material-ui/core"
 import Stats from "./Stats"
 import GetAppIcon from "@material-ui/icons/GetApp"
 import PublishIcon from "@material-ui/icons/Publish"
 import ChevronLeftIcon from "@material-ui/icons/ChevronLeft"
 import ChevronRightIcon from "@material-ui/icons/ChevronRight"
-import LineChart from "../Charts/LineChart"
+import LineChart, { IChartData } from "../Charts/LineChart"
+
+interface TestResults {
+    up: Number
+    down: Number
+    server: String
+    date: string
+    _id: String
+}
 
 const useStyles = makeStyles((theme) => ({
     container: {
@@ -23,28 +31,41 @@ const useStyles = makeStyles((theme) => ({
     },
 }))
 
-const foo = {
-    labels: ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"],
-    datasets: [
-        {
-            data: [86, 114, 106, 106, 107, 111, 133],
-            label: "Total",
-            borderColor: "#3e95cd",
-            backgroundColor: "#7bb6dd",
-            fill: false,
-        },
-    ],
+const dateFormat = (ISODateString: string): String => {
+    return new Intl.DateTimeFormat("pl-PL", {
+        day: "2-digit",
+        month: "2-digit",
+        hour: "2-digit",
+        minute: "2-digit",
+    }).format(new Date(ISODateString))
 }
 
 const Dashboard = () => {
+    const [results, setResults] = useState<IChartData>()
     const classes = useStyles()
 
     useEffect(() => {
         const getResults = async () => {
             try {
                 const response = await fetch("http://localhost:5001/tests/get")
-                const data = await response.json()
-                console.log(data)
+                const results: TestResults[] = await response.json()
+                setResults({
+                    data: {
+                        labels: results.map((r) => dateFormat(r.date)).reverse(),
+                        datasets: [
+                            {
+                                label: "Download",
+                                data: results.map((r) => r.down).reverse(),
+                                borderColor: "#00ff00",
+                            },
+                            {
+                                label: "Upload",
+                                data: results.map((r) => r.up).reverse(),
+                                borderColor: "#0000ff",
+                            },
+                        ],
+                    },
+                })
             } catch (e) {
                 console.error(e)
             }
@@ -69,7 +90,7 @@ const Dashboard = () => {
                             </IconButton>
                         </Grid>
                         <Grid item xs={10}>
-                            <LineChart data={foo} />
+                            {results && <LineChart data={results.data} />}
                         </Grid>
                         <Grid item xs={1} container alignContent="center">
                             <IconButton className={classes.arrows}>

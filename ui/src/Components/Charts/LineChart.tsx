@@ -1,7 +1,7 @@
 import React, { useEffect, useRef } from "react"
 import Chart, { BubbleDataPoint, ChartConfiguration, ChartTypeRegistry, ScatterDataPoint } from "chart.js/auto"
 
-interface IChartData {
+export interface IChartData {
     data: {
         labels: String[]
         datasets: {
@@ -15,7 +15,6 @@ interface IChartData {
 
 const LineChart = ({ data }: IChartData) => {
     const chartRef = useRef<HTMLCanvasElement | null>(null)
-
     useEffect(() => {
         let chart: Chart<keyof ChartTypeRegistry, (number | ScatterDataPoint | BubbleDataPoint | null)[], unknown>
         const node = chartRef?.current
