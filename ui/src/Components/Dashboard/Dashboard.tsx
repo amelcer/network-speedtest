@@ -8,8 +8,8 @@ import ChevronRightIcon from "@material-ui/icons/ChevronRight"
 import LineChart, { IChartData } from "../Charts/LineChart"
 
 interface TestResults {
-    up: Number
-    down: Number
+    up: number
+    down: number
     server: String
     date: string
     _id: String
@@ -42,6 +42,8 @@ const dateFormat = (ISODateString: string): String => {
 
 const Dashboard = () => {
     const [results, setResults] = useState<IChartData>()
+    const [maxUpload, setMaxUpload] = useState<number>(0)
+    const [maxDownload, setMaxDownload] = useState<number>(0)
     const classes = useStyles()
 
     useEffect(() => {
@@ -49,18 +51,23 @@ const Dashboard = () => {
             try {
                 const response = await fetch("http://localhost:5001/tests/get")
                 const results: TestResults[] = await response.json()
+                const uploads: number[] = results.map((r) => r.up)
+                const downloads: number[] = results.map((r) => r.down)
+
+                setMaxUpload(Math.max(...uploads))
+                setMaxDownload(Math.max(...downloads))
                 setResults({
                     data: {
                         labels: results.map((r) => dateFormat(r.date)).reverse(),
                         datasets: [
                             {
                                 label: "Download",
-                                data: results.map((r) => r.down).reverse(),
+                                data: [...downloads.reverse()],
                                 borderColor: "#00ff00",
                             },
                             {
                                 label: "Upload",
-                                data: results.map((r) => r.up).reverse(),
+                                data: [...uploads.reverse()],
                                 borderColor: "#0000ff",
                             },
                         ],
@@ -76,10 +83,10 @@ const Dashboard = () => {
     return (
         <Grid container justifyContent="center" className={classes.container} item sm={10} xs={12} spacing={3}>
             <Grid item lg={4} sm={6}>
-                <Stats title="Największy download dziś" icon={<GetAppIcon />} value={55} />
+                <Stats title="Największy download dziś" icon={<GetAppIcon />} value={maxDownload} />
             </Grid>
             <Grid item lg={4} sm={6}>
-                <Stats title="Największy upload dziś" icon={<PublishIcon />} value={35} />
+                <Stats title="Największy upload dziś" icon={<PublishIcon />} value={maxUpload} />
             </Grid>
             <Grid container justifyContent="center" alignContent="center" item xs={12}>
                 <Card className={classes.chartContainer}>
